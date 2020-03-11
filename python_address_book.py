@@ -7,7 +7,7 @@ class AddressBook(object):
         self.email = email
         self.tell = tell
         self.contacts = {}
-        self.filename = "addressbook.vbs"
+        self.filename = "addressbook.db"
 
     def  add(self):
         try:
@@ -51,6 +51,24 @@ class AddressBook(object):
             myAddressBook.close()
         else:
             print('No Record in database.')
+    def search(self):
+        if os.path.exists(self.filename) and os.path.getsize(self.filename):
+            myAddressBook = open(self.filename,'rb')
+            data = pickle.load(myAddressBook)
+            myAddressBook.close()
+            try:
+                contactToSearch = raw_input('Enter search name')
+                counter = 0
+                for contact in data.values():
+                    if contactToSearch in contact['Name']:
+                        print(data[contact['Name']])
+                        counter+=1
+                if counter ==0:
+                    print('No record find',contactToSearch)
+            except:
+                print('Error')
+        else:
+            print('No record in data')
 if __name__ ==  "__main__":
     myBook = AddressBook()
     print('Plz type your chiose:')
@@ -60,3 +78,5 @@ if __name__ ==  "__main__":
             myBook.add()
         elif choise==2:
             myBook.displayContacts()
+        elif choise==3:
+            myBook.search()
